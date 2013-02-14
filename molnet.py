@@ -37,11 +37,17 @@ class Energimolnet:
                 "resolution": resolution
             }])
 
-        urlencoded = urllib.pathname2url('/data/unit_id/%s/metrics/%s/intervals/%s' \
+        _, content = self.get('/data/unit_id/%s/metrics/%s/intervals/%s' \
             % (unit_id, metrics, json_intervals))
 
-        _, content = self.get(urlencoded)
+        return content
 
+    def nordpoolspot(self, unit_id, intervals):
+        formatted_intervals = [{"from": value[0], "to": value[1]} for
+            value in intervals]
+        json_intervals = json.dumps(formatted_intervals)
+        _, content = self.get('/nordpoolspot/unit_id/%s/intervals/%s' \
+            % (unit_id, json_intervals))
         return content
 
     def get(self, method, headers={}):
@@ -56,8 +62,9 @@ class Energimolnet:
                 'Connection': 'keep-alive'
             })
 
+        urlencoded_method = urllib.pathname2url(method)
         opener = urllib2.build_opener()
-        request = urllib2.Request(makeurl(method), headers=headers)
+        request = urllib2.Request(makeurl(urlencoded_method), headers=headers)
         response = opener.open(request)
 
         return response.headers, json.loads(response.read())

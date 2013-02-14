@@ -36,6 +36,15 @@ class TestEnergimolnet(unittest.TestCase):
         [metric] = [metric for metric in unit_energy if 'energy' in metric]
         assert len(metric['energy']) > 0
 
+    def test_nordpoolspot_with_one_interval(self):
+        min, max = self.api._get_unit_metric_boundary(TEST_UNIT_ID, 'hour')
+        prices = self.api.nordpoolspot(TEST_UNIT_ID, [(min, max)])
+        assert len(prices) == 1  # only check that it contains one interval
+
+    def test_nordpoolspot_with_multiple_intervals(self):
+        interval = self.api._get_unit_metric_boundary(TEST_UNIT_ID, 'hour')
+        prices = self.api.nordpoolspot(TEST_UNIT_ID, [interval, interval])
+        assert len(prices) == 2
 
 if __name__ == '__main__':
     unittest.main()

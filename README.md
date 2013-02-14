@@ -17,7 +17,9 @@ print emoln.customer()
 
 print emoln.unit('00000000000000')
 
-print emoln.data('00000000000000', metrics=['energy'], intervals=(1235412412, 123124212), resolution='hour')
+print emoln.data('00000000000000', metrics=['energy'], intervals=(1234, 4321), resolution='hour')
+
+print emoln.data('00000000000000', [(1234, 4321)])
 
 ```
 
